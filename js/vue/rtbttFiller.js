@@ -27,7 +27,7 @@ Vue.component('rtbtt-filler', {
         <div v-else>
             <form>
             Introdueix l'identificador de l'encontre:
-            <input name="id" type="numeric"/>
+            <input name="id" type="number" pattern="[0-9]*" inputmode="numeric"/>
             <input type="submit" value="Envia">
             </form>
         </div>
