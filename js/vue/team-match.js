@@ -122,13 +122,13 @@ Vue.component('team-match', {
                     <span>{{sm.player1}}: <b>{{player(idPlayers[sm.player1])}}<b> </span>
                 </div>
                 <div class="col s1">
-                    <input v-if="i < 3" v-model="idPlayers[sm.player1]" placeholder="Dorsal">
+                    <input v-if="i < 3" type="number" v-model="idPlayers[sm.player1]" placeholder="Dorsal">
                 </div>
                 <div class="col s3">
                     <span>{{sm.player2}}: <b>{{player(idPlayers[sm.player2])}}<b> </span>
                 </div>
                <div class="col s1">
-                    <input v-if="i < 3" v-model="idPlayers[sm.player2]" placeholder="Dorsal">
+                    <input v-if="i < 3" type="number" v-model="idPlayers[sm.player2]" placeholder="Dorsal">
                 </div>
                 <div class="col s1">
                     <input v-model="sm.points1" type="number" min="0" max="3" step="1">
