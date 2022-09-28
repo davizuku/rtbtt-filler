@@ -15,8 +15,6 @@ Vue.component('team-match', {
         return {
             'xyz': false,
             'match': match,
-            'teamA': match["Equip Local"],
-            'teamX': match["Equip Visitant"],
             'idPlayers': {
                 'A': '',
                 'B': '',
