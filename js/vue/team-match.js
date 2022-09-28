@@ -13,7 +13,7 @@ Vue.component('team-match', {
         ];
 
         return {
-            'xyz': false,
+            'xyz': '0',
             'match': match,
             'idPlayers': {
                 'A': '',
@@ -49,10 +49,10 @@ Vue.component('team-match', {
     },
     computed: {
         teamA: function() {
-            return this.xyz ? this.match["Equip Visitant"] : this.match["Equip Local"];
+            return parseInt(this.xyz) ? this.match["Equip Visitant"] : this.match["Equip Local"];
         },
         teamX: function() {
-            return this.xyz ? this.match["Equip Local"] : this.match["Equip Visitant"];
+            return parseInt(this.xyz) ? this.match["Equip Local"] : this.match["Equip Visitant"];
         },
         winner: function() {
             var score = this.total(5);
@@ -88,6 +88,18 @@ Vue.component('team-match', {
                 </div>
                 <div class="col s3">
                     <p>Grup: {{match.Grup}}</p>
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col s4 offset-s4">
+                    <label>
+                        <input type="radio" name="xyz" id="abcLocal" value="0" v-model="xyz">
+                        <span>ABC/XYZ</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="xyz" id="xyzLocal" value="1" v-model="xyz">
+                        <span>XYZ/ABC</span>
+                    </label>
                 </div>
             </div>
             <div class="row">
