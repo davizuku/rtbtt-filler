@@ -74,6 +74,11 @@ Vue.component('team-match', {
             return w;
         }
     },
+    methods: {
+        downloadCsv: function (event) {
+            console.log("Downloading CSV", this);
+        }
+    },
     template: `
         <div class='team-match'>
             <div class="row">
@@ -150,6 +155,15 @@ Vue.component('team-match', {
                 </div>
                 <div class="col s2">
                     <p>Jocs: {{winner.sets}}</p>
+                </div>
+            </div>
+            <div class="row" v-if="winner">
+                <div class="col offset-s8 s4">
+                    Descarrega:
+                    <a class="waves-effect waves-light btn" v-on:click="downloadCsv">
+                        <i class="material-icons right">cloud_download</i>
+                        CSV
+                    </a>
                 </div>
             </div>
         <div>
