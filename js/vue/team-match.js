@@ -76,7 +76,134 @@ Vue.component('team-match', {
     },
     methods: {
         downloadCsv: function (event) {
-            console.log("Downloading CSV", this);
+            function buildCsvRow(cells) {
+                var row = Array(18).fill('');
+                if (cells) {
+                    for (var index in cells) {
+                        var value = cells[index];
+                        if (typeof value == 'string') {
+                            value = value.replace('"', '');
+                        }
+                        row[index] = value;
+                    }
+                }
+                return row.join(';') + "\n";
+            }
+            // TODO: build object
+            var csv = "";
+            csv += buildCsvRow();
+            csv += buildCsvRow({
+                2: "ACTA:",
+                3: this.id,
+                6: "Temporada 2022/23",
+            });
+            csv += buildCsvRow({
+                1: "El número d'acta la podeu trobar al calendari",
+                4: "NOMÉS CAL OMPLIR LES CASELLES DE COLOR, LA RESTA SURT AUTOMÀTIC",
+            });
+            csv += buildCsvRow({
+                4: "En cas que surti un error #N/A, llavors sí que haureu d'escriure el nom",
+            });
+            csv += buildCsvRow({
+                2: "CATEGORIA:",
+                3: this.match['Categoria'],
+                5: "FASE:",
+                6: this.match['Fase'],
+            });
+            csv += buildCsvRow();
+            csv += buildCsvRow({
+                2: "GRUP:",
+                3: this.match['Grup'],
+                5: "JORNADA:",
+                6: this.match['Jornada'],
+            });
+            csv += buildCsvRow();
+            csv += buildCsvRow(); // TODO add radio button ABC/XYZ
+            csv += buildCsvRow({
+                2: "EQ. LOCAL:",
+                3: this.teamA,
+                7: "EQ. VISITANT:",
+                8: this.teamX,
+            });
+            csv += buildCsvRow(); // TODO add radio button XYZ/ABC
+            csv += buildCsvRow();
+            csv += buildCsvRow({
+                11: "JOCS",
+                15: "TOTAL",
+            });
+            csv += buildCsvRow({
+                2: "nº pers.",
+                6: "nº pers.",
+            });
+            for (var i in this.singleMatches) {
+                var sm = this.singleMatches[i];
+                csv += buildCsvRow({
+                    1: sm.player1,
+                    2: this.idPlayers[sm.player1],
+                    3: this.player(this.idPlayers[sm.player1]),
+                    6: sm.player2,
+                    7: this.idPlayers[sm.player2],
+                    8: this.player(this.idPlayers[sm.player2]),
+                    11: sm.points1,
+                    13: sm.points2,
+                    15: this.total(i)[0],
+                    17: this.total(i)[1],
+                });
+            }
+            // TODO: add Doubles match
+            csv += buildCsvRow({
+                1: "DOBLES",
+                2: "", // TODO: add doubles player A.1 id
+                3: "", // TODO: add doubles player A.1 name
+                6: "DOBLES",
+                7: "", // TODO: add doubles player X.1 id
+                8: "", // TODO: add doubles player X.1 name
+                11: 0,
+                13: 0,
+                // TODO: compute total
+                15: 0,
+                17: 0,
+            });
+            csv += buildCsvRow({
+                2: "", // TODO: add doubles player A.2 id
+                3: "", // TODO: add doubles player A.2 name
+                7: "", // TODO: add doubles player X.2 id
+                8: "", // TODO: add doubles player X.2  name
+            });
+            csv += buildCsvRow();
+            csv += buildCsvRow();
+            csv += buildCsvRow({
+                2: "GUANYADOR",
+                4: "RESULTAT",
+                6: "JOCS",
+                8: "En el cas de substitució d'un jugador, s'ha d'introduir a mà."
+            });
+            csv += buildCsvRow({
+                2: this.winner.team,
+                4: this.winner.score[0],
+                5: this.winner.score[1],
+                6: this.winner.sets[0],
+                7: this.winner.sets[1],
+                8: "Recordeu posar els jugadors als dobles, en cas de disputar-lo.",
+            });
+            console.log("CSV:\n", csv)
+            var exportedFilenmae = 'resultats-' + this.id + '.csv';
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(blob, exportedFilenmae);
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) { // feature detection
+                    // Browsers that support HTML5 download attribute
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", exportedFilenmae);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
         }
     },
     template: `
